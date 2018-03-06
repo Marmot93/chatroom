@@ -4,7 +4,7 @@
 					$username=$_POST["username"];
 					$pass=$_POST["pass"];
 					
-					$conn=mysql_connect("localhost","root","136426ww");//链接数据库
+					$conn=mysql_connect("localhost","root","********");//连接数据库，写自己的数据库密码
 
 					if(!$conn){
 						die("连接失败".$conn->connect_error);
@@ -13,7 +13,6 @@
 					// 	echo "连接成功";
 					// }
 					
-
 					// 选择数据库
 					mysql_select_db("mychat",$conn);
 					// $insert="INSERT INTO user(id,pass)
@@ -46,15 +45,9 @@
 					// 				} 这里要写$sq,而不是$rows
 					// echo "111".$row['id'];证明是获取到了值
 					
-					
-					
-					
-
-
 					// $sq=mysql_query("SELECT * FROM user");//在数据库查询
-					 
 					// while($row=mysql_fetch_array($sq))//赋值并判断，之所以错误是因为自己的条件判断写错了。。
-  			// 			{
+  					// 			{
 					// 	  echo $row['id'] . " " . $row['pass'];
 					// 	  echo "<br />";
 					// 	 }

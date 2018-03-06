@@ -63,11 +63,7 @@ $(document).ready(function(){
 			$.each(json,function(json,ele){
 				$("select").append('<option>'+ele+'</option>');
 
-			});
-			// $mychat=$("select option:first").remove();
-			// $("span#mychat").append($mychat);
-
-			
+			});	
 		});
 		//获取随机数，可以充当用户id
 		function toNum(){
@@ -77,7 +73,7 @@ $(document).ready(function(){
         toNum();
 	//把自己输入的信息存入数据库，并读取出来显示在聊天框中。
 	//alert($("select :selected").text());
-//当前时间函数
+	//当前时间函数
 	function currentTime(){
 		var d = new Date(),str = '';
 		 str += d.getFullYear()+'-';
@@ -116,7 +112,7 @@ $(document).ready(function(){
   
 });
 
-  function update(){
+ 	 function update(){
   	// alert(maxId);如果是get，php接收不到参数，那为什么为0？
     	$.post("sendmsg.php",
     	{
@@ -130,7 +126,7 @@ $(document).ready(function(){
     }
 
     update();
-setInterval("update()",10000);
+	setInterval("update()",10000);
     function addMessage(data,status){
  			$("#sta").text(status);
  			var json = JSON.parse(data);

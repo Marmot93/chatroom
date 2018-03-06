@@ -3,7 +3,7 @@ header("content-type:text/html;charset=utf-8");
 // $username=$_POST["username"];
 // $pass=$_POST["pass"];
 					
-$conn=mysql_connect("localhost","root","136426ww");//链接数据库
+$conn=mysql_connect("localhost","root","********");//链接数据库
 
 if(!$conn){
 	die("数据库连接失败".$conn->connect_error);

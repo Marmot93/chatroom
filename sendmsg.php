@@ -17,7 +17,7 @@
 	// echo $user;
 	// echo $time;
    
-    $conn=mysql_connect("localhost","root","136426ww");//连接数据库
+    $conn=mysql_connect("localhost","root","********");//连接数据库
     if(!$conn){
 	die("数据库连接失败".$conn->connect_error);
 	}
