@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>登录页面</title>
+	<style type="text/css">
+		form{
+			width: 500px;
+			height: 220px;
+			margin: 50px auto;
+			background: #f0f8ff;
+			padding-left: 100px;
+			box-sizing: border-box;
+		}
+		#username{
+			margin-top: 50px;
+		}
+		#pass{
+			margin: 10px auto;
+		}
+		a{
+			text-decoration: none;
+		}
+		.reminder{
+			color: red;
+		}
+		/*.reminder:before{
+			content: "*";
+		}*/
+	</style>
+</head>
+<body>
+<form>
+	姓名：<input type="text" name="username" id="username"><span id="reminder"></span><br>
+	密码：<input type="password" id="pass" name="pass"><br>
+	<button id="sub"><a href="#">登录</a></button>
+	<input type="reset" name="" value="重置">
+</form>
+<div class="show" style="width: 200px;height: 20px;margin: 0 auto"></div>
+<script type="text/javascript" src="javascript/jquery-3.2.1.js"></script>
+<script type="text/javascript">
+	$("#sub a").bind("mousedown",function(event){//要改为mousedown，不然第二次点击才会生效
+
+					
+ 					$("#reminder").text("").removeClass(reminder);//清空提示语
+
+					$.post("log-in.php",
+					{
+							"username":$("#username").val(),
+							"pass":$("#pass").val()
+					},function(data){
+						if(data==1){//如果验证正确，直接进入另一个页面，如果错误，就给出提示,并且取消浏览器默认行为
+							$("#sub a").attr("href","index.html");
+						}
+						else{
+							$("#sub a").attr("href","#");
+							$("#reminder").text(data).addClass("reminder");
+							//输入的字符不符合设置的int，数据库会报错，所以需要前端后端都进行合法性校验
+							
+						}
+
+					})
+					
+	})
+
+
+		//思路：点击的时候利用ajax把数据传到php，通过php去检查传入的值，数据库中有没有，有的话，登录成功，进入聊天页面，失败的话，提示密码错误或者用户名不存在。
+		
+			
+	
+</script>
+</body>
+</html>

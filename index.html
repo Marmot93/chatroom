@@ -1,0 +1,151 @@
+<!-- 聊天页面 -->
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>聊天页面</title>
+	<style type="text/css">
+		#exit a{
+			text-decoration: none;
+			position:relative;
+			left: 1200px;
+		}
+		#wrapper{
+			width: 500PX;
+			height: 400px;
+			border: 1px solid grey;
+			margin: 0 auto;
+			padding:10px;
+
+		}
+		#messagewindow{
+			width:480px;
+			height: 300px;
+			border: 1px solid grey;
+			overflow: auto;
+			margin:0 0 10px 0;
+			position: relative;
+		}
+		.time{
+			color:grey;
+			position: absolute;
+			right: 0;
+		}
+		.msgBox{
+			background-color: #f6d3d352;
+		}
+	</style>
+</head>
+<body>
+<!-- <div id="exit"><a href="log-in.html">退出</a></div> -->
+<div id="wrapper">
+	<span id="mychat" style="height: 20px;color: grey;"></span>
+	<p id="messagewindow"><span id="loading">加载中...</span></p>
+	<form id="chatform">
+		好友列表：<select style="width: 100px;">
+				  <option>所有</option>
+				  </select><br>
+		内容：<input type="text" name="" id="message" size="50" /><br/>
+		<input type="button" value="发送" name="" id="sub"><span id="sta"></span><br/><!-- 这里不能用submit，因为会有提交行为，页面会自动刷新 --><!-- span显示发送状态。 -->
+		
+	</form>
+</div>
+<script type="text/javascript" src="javascript/jquery-3.2.1.js"></script>
+<script type="text/javascript">
+	// 这里是从数据库把自己的信息和好友列表的信息先显示出来。
+	var maxId=0;
+$(document).ready(function(){
+	    
+	    // update();
+	    
+		$.get("senduser.php",function(data,status){
+			var json = JSON.parse(data);//把获取的值处理了。编程js中的数组
+			$.each(json,function(json,ele){
+				$("select").append('<option>'+ele+'</option>');
+
+			});
+			// $mychat=$("select option:first").remove();
+			// $("span#mychat").append($mychat);
+
+			
+		});
+		//获取随机数，可以充当用户id
+		function toNum(){
+            var num = Math.floor(41*Math.random());
+            $("span#mychat").append(num);
+        }
+        toNum();
+	//把自己输入的信息存入数据库，并读取出来显示在聊天框中。
+	//alert($("select :selected").text());
+//当前时间函数
+	function currentTime(){
+		var d = new Date(),str = '';
+		 str += d.getFullYear()+'-';
+		 str  += d.getMonth() + 1+'-';
+		 str  += d.getDate()+' ';
+		 str += d.getHours()+':'; 
+		 str  += d.getMinutes()+':'; 
+		str+= d.getSeconds(); 
+		return str;
+	}
+
+   $("#sub").click(function(){
+   	//此处进行合法性校验，只有在非空格是才能给数据库
+   	   $.ajax({
+	   	   	type:"POST",
+	   	   	url:"sendmsg.php",
+	   	   	data:{
+	   	   	"user":$("span#mychat").text(),
+	   	   	"friend":$("select :selected").text(),
+	   	   	"msg":$("#message").val(),
+	   	   	"time":currentTime,
+	   	   	"maxId":maxId
+	   	   },
+	   	   // dataType:"json",
+	   	   success:function(data,status){
+	   	     $("#loading").remove();
+	   	   	 $("#sta").remove(status);
+	   	   	 
+	   	   	 addMessage(data,status);
+	   	   	
+	   	   	 // addMessage(data);//解析传回来的数据
+	   	   }
+   	   })
+   	 
+   })
+  
+});
+
+  function update(){
+  	// alert(maxId);如果是get，php接收不到参数，那为什么为0？
+    	$.post("sendmsg.php",
+    	{
+    		"maxId":maxId
+    	},function(data){
+    		$("#loading").remove();
+    		addMessage(data,status);
+    		
+    	})
+    	
+    }
+
+    update();
+setInterval("update()",10000);
+    function addMessage(data,status){
+ 			$("#sta").text(status);
+ 			var json = JSON.parse(data);
+ 			 // $("#messagewindow").append(json[0].msg);
+ 			var s="";
+ 			for(i=0;i<json.length;i++){
+ 				s+="<p class='msgBox'>"+json[i].user+"号选手对 "+json[i].friend+"同学说: "+json[i].msg+"<span class=time>"+json[i].time.substring(11,16)+"</span>"+"</p>";
+ 				maxId=json[i].id;
+ 				
+ 			}
+ 			$("#messagewindow").append(s);
+ 			$('#messagewindow').scrollTop( $('#messagewindow')[0].scrollHeight );
+ 			
+ 			
+    }
+</script>
+</body>
+</html>
